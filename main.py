@@ -1,4 +1,5 @@
 import sys
+import time
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QFileDialog, QSlider, QCheckBox, QMessageBox, QHBoxLayout
 from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -43,7 +44,7 @@ class ImageToAudioConverter(QWidget):
 
     def initUI(self):
         layout = QVBoxLayout()
-        self.resize(400, 600)
+        self.resize(600, 800)
 
         # File selection
         self.file_label = QLabel("No file selected")
@@ -52,7 +53,7 @@ class ImageToAudioConverter(QWidget):
         select_button = QPushButton("Select Image")
         select_button.clicked.connect(self.select_file)
         select_button.setMinimumSize(150, 70)
-        select_button.setMaximumSize(700, 100)
+        select_button.setMaximumSize(1000, 100)
         layout.addWidget(select_button)
 
         # Sliders for frequency range
@@ -113,7 +114,7 @@ class ImageToAudioConverter(QWidget):
         convert_button = QPushButton("Convert to Audio")
         convert_button.clicked.connect(self.convert_to_audio)
         convert_button.setMinimumSize(100, 20)
-        convert_button.setMaximumSize(700, 30)
+        convert_button.setMaximumSize(1000, 30)
         layout.addWidget(convert_button)
 
         self.spectrogram_canvas = SpectrogramCanvas(self)
@@ -150,6 +151,8 @@ class ImageToAudioConverter(QWidget):
         if not output_path:
             return
 
+        start_time = time.time()
+
         audio_converter.convert_image_to_audio(
             self.image_path,
             output_path,
@@ -161,6 +164,11 @@ class ImageToAudioConverter(QWidget):
             invert=self.invert_checkbox.isChecked()
         )
         QMessageBox.information(self, "Success", f"Audio file has been saved to {output_path}")
+
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        print(f"Execution time: {elapsed_time:.2f} seconds")
+
 
         self.spectrogram_canvas.plot_spectrogram(output_path)
 
