@@ -4,7 +4,7 @@ import math
 import array
 
 
-def convert_image_to_audio(image_path, output, minfreq=200, maxfreq=20000, pxs=30, wavrate=44100, rotate=False, invert=False):
+def convert_image_to_audio(image_path, output, minfreq, maxfreq, pxs, wavrate, rotate, invert):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
     if rotate:
