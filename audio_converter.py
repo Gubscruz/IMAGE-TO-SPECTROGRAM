@@ -3,20 +3,20 @@ import wave
 import math
 import array
 
+
 def convert_image_to_audio(image_path, output, minfreq=200, maxfreq=20000, pxs=30, wavrate=44100, rotate=False, invert=False):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
     if rotate:
         image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
-
     if invert:
         image = cv2.bitwise_not(image)
 
     output_wave = wave.open(output, 'w')
     output_wave.setparams((1, 2, wavrate, 0, 'NONE', 'not compressed'))
 
-    freqrange = maxfreq - minfreq
-    interval = freqrange / image.shape[0]
+    freq_range = maxfreq - minfreq
+    interval = freq_range / image.shape[0]
 
     fpx = wavrate // pxs
     data = array.array('h')
@@ -43,6 +43,7 @@ def convert_image_to_audio(image_path, output, minfreq=200, maxfreq=20000, pxs=3
 
     output_wave.writeframes(data.tobytes())
     output_wave.close()
+
 
 def genwave(frequency, amplitude, samples, samplerate):
     cycles = samples * frequency / samplerate
